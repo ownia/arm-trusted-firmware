@@ -14,7 +14,9 @@
 #include <common/debug.h>
 #include <drivers/arm/cci.h>
 #include <lib/utils.h>
+#include <lib/smccc.h>
 #include <lib/xlat_tables/xlat_tables_compat.h>
+#include <services/arm_arch_svc.h>
 
 #include <plat_private.h>
 
@@ -97,4 +99,28 @@ void plat_cci_disable(void)
 #ifdef PLAT_RK_CCI_BASE
 	cci_disable_snoop_dvm_reqs(MPIDR_AFFLVL1_VAL(read_mpidr()));
 #endif
+}
+
+int32_t plat_is_smccc_feature_available(u_register_t fid)
+{
+	switch (fid) {
+	case SMCCC_ARCH_SOC_ID:
+		return SMC_ARCH_CALL_SUCCESS;
+	default:
+		return SMC_ARCH_CALL_NOT_SUPPORTED;
+	}
+}
+
+int32_t plat_get_soc_version(void)
+{
+	uint32_t manfid = SOC_ID_SET_JEP_106(JEDEC_ROCKCHIP_BKID, JEDEC_ROCKCHIP_MFID);
+
+	return (int32_t)(manfid | SOC_ID_IMPL_DEF_MASK);
+}
+
+int32_t plat_get_soc_revision(void)
+{
+	uint32_t platid = ROCKCHIP_PLAT_ID;
+
+	return (int32_t)(platid & SOC_ID_REV_MASK);
 }

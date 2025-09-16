@@ -155,4 +155,8 @@ void rockchip_init_scmi_server(void);
 #define PMU_CPU_AUTO_PWRDN	0xf0
 #define PMU_CLST_RET	0xa5
 
+#define JEDEC_ROCKCHIP_BKID U(11)
+#define JEDEC_ROCKCHIP_MFID U(0x12)
+#define ROCKCHIP_PLAT_ID 0x3588
+
 #endif /* PLAT_PRIVATE_H */
